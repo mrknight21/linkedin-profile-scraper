@@ -584,16 +584,16 @@ export class LinkedInProfileScraper {
 
         const url = window.location.href
 
-        const fullNameElement = profileSection?.querySelector('.pv-top-card--list li:first-child')
+        const fullNameElement = profileSection?.querySelector('h1')
         const fullName = fullNameElement?.textContent || null
 
-        const titleElement = profileSection?.querySelector('h2')
+        const titleElement = profileSection?.querySelector('.text-body-medium')
         const title = titleElement?.textContent || null
 
-        const locationElement = profileSection?.querySelector('.pv-top-card--list.pv-top-card--list-bullet.mt1 li:first-child')
+        const locationElement = profileSection?.querySelector('span.text-body-small.inline.t-black--light.break-words')
         const location = locationElement?.textContent || null
 
-        const photoElement = profileSection?.querySelector('.pv-top-card__photo') || profileSection?.querySelector('.profile-photo-edit__preview')
+        const photoElement = profileSection?.querySelector('img.pv-top-card-profile-picture__image')
         const photo = photoElement?.getAttribute('src') || null
 
         const descriptionElement = document.querySelector('.pv-about__summary-text .lt-line-clamp__raw-line') // Is outside "profileSection"
