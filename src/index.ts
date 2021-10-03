@@ -145,7 +145,7 @@ interface ScraperOptions {
 
 async function autoScroll(page: Page) {
   await page.evaluate(() => {
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       var totalHeight = 0;
       var distance = 500;
       var timer = setInterval(() => {
