@@ -20,8 +20,8 @@ provider:
 
 functions:
   signUp:
-    handler: src/handlers/linkedin.ProfileCrawler
+    handler: src/handlers/linkedin.crawlProfile
     events:
-      - httpApi:
+      - http:
           path: /${self:provider.stage}/linkedin-crawel
           method: GET
