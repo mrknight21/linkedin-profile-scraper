@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { APIGatewayProxyResult, APIGatewayProxyEvent } from 'aws-lambda';
 
 
-export const getTalentById = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+export const crawlProfile = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   try {
     return {
       statusCode: 200,
