@@ -161,7 +161,6 @@ export const autoScroll = async (page: Page) => {
 
         if (totalHeight >= scrollHeight) {
           clearInterval(timer);
-          resolve();
         }
       }, 100);
     });
