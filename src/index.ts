@@ -6,6 +6,7 @@ import blockedHostsList from './blocked-hosts';
 import { getDurationInDays, formatDate, getCleanText, getLocationFromText, statusLog, getHostname } from './utils'
 import { SessionExpired } from './errors';
 
+
 export interface Location {
   city: string | null;
   province: string | null;
@@ -94,6 +95,10 @@ export interface Skill {
   endorsementCount: number | null;
 }
 
+interface IDictionary {
+  [index:string]: boolean;
+}
+
 interface ScraperUserDefinedOptions {
   /**
    * The LinkedIn `li_at` session cookie value. Get this value by logging in to LinkedIn with the account you want to use for scraping.
@@ -146,10 +151,10 @@ interface ScraperOptions {
 async function autoScroll(page: Page) {
   await page.evaluate(() => {
     return new Promise<void>((resolve, reject) => {
-      var totalHeight = 0;
-      var distance = 500;
-      var timer = setInterval(() => {
-        var scrollHeight = document.body.scrollHeight;
+      let totalHeight = 0;
+      const distance = 500;
+      const timer = setInterval(() => {
+        const scrollHeight = document.body.scrollHeight;
         window.scrollBy(0, distance);
         totalHeight += distance;
 
@@ -379,10 +384,10 @@ export class LinkedInProfileScraper {
    * 
    * More info: http://winhelp2002.mvps.org/hosts.htm
    */
-  private getBlockedHosts = (): object => {
+  private getBlockedHosts = (): IDictionary => {
     const blockedHostsArray = blockedHostsList.split('\n');
 
-    let blockedHostsObject = blockedHostsArray.reduce((prev, curr) => {
+    let blockedHostsObject = blockedHostsArray.reduce((prev, curr): IDictionary => {
       const frags = curr.split(' ');
 
       if (frags.length > 1 && frags[0] === '0.0.0.0') {
@@ -624,7 +629,7 @@ export class LinkedInProfileScraper {
       statusLog(logSection, `Parsing experiences data...`, scraperSessionId)
 
       const rawExperiencesData: RawExperience[] = await page.$$eval('#experience-section ul > .ember-view', (nodes) => {
-        let data: RawExperience[] = []
+        const data: RawExperience[] = []
 
         // Using a for loop so we can use await inside of it
         for (const node of nodes) {
@@ -701,7 +706,7 @@ export class LinkedInProfileScraper {
       const rawEducationData: RawEducation[] = await page.$$eval('#education-section ul > .ember-view', (nodes) => {
         // Note: the $$eval context is the browser context.
         // So custom methods you define in this file are not available within this $$eval.
-        let data: RawEducation[] = []
+        const data: RawEducation[] = []
         for (const node of nodes) {
 
           const schoolNameElement = node.querySelector('h3.pv-entity__school-name');
@@ -760,7 +765,7 @@ export class LinkedInProfileScraper {
       const rawVolunteerExperiences: RawVolunteerExperience[] = await page.$$eval('.pv-profile-section.volunteering-section ul > li.ember-view', (nodes) => {
         // Note: the $$eval context is the browser context.
         // So custom methods you define in this file are not available within this $$eval.
-        let data: RawVolunteerExperience[] = []
+        const data: RawVolunteerExperience[] = []
         for (const node of nodes) {
 
           const titleElement = node.querySelector('.pv-entity__summary-info h3');
