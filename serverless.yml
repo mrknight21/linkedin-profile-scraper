@@ -4,13 +4,14 @@ useDotenv: true
 # Create an optimized package for our functions
 package:
   individually: true
+  exclude:
+    - node_modules/puppeteer/.local-chromium/**
 
 plugins:
-  - serverless-bundle # Package our functions with Webpack
+  - serverless-bundle
   - serverless-offline
-  - serverless-dotenv-plugin # Load .env as environment variables
-
-
+  - serverless-dotenv-plugin
+  - serverless-plugin-chrome
 provider:
   lambdaHashingVersion: 20201221
   name: aws

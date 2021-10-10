@@ -5,6 +5,7 @@ import blockedHostsList from './blocked-hosts';
 
 import { getDurationInDays, formatDate, getCleanText, getLocationFromText, statusLog, getHostname } from './utils'
 import { SessionExpired } from './errors';
+import {getChrome} from './chrome-script'
 
 
 export interface Location {
@@ -220,7 +221,8 @@ export class LinkedInProfileScraper {
     try {
       statusLog(logSection, `Launching puppeteer in the ${this.options.headless ? 'background' : 'foreground'}...`)
 
-      this.browser = await puppeteer.launch({
+      // this.browser = await puppeteer.launch(
+      const browserOptions =  {
         headless: this.options.headless,
         args: [
           ...(this.options.headless ? '---single-process' : '---start-maximized'),
@@ -271,7 +273,14 @@ export class LinkedInProfileScraper {
           '--use-mock-keychain'
         ],
         timeout: this.options.timeout
-      })
+      }
+
+      const chromeBrowser = await getChrome();
+      this.browser = await puppeteer.connect({
+        ...browserOptions,
+        browserWSEndpoint: chromeBrowser.endpoint
+      });
+
 
       statusLog(logSection, 'Puppeteer launched!')
 
@@ -281,7 +290,7 @@ export class LinkedInProfileScraper {
     } catch (err) {
       // Kill Puppeteer
       await this.close();
-
+      statusLog(logSection, JSON.stringify(err.message))
       statusLog(logSection, 'An error occurred during setup.')
 
       throw err
@@ -418,51 +427,35 @@ export class LinkedInProfileScraper {
    * Method to complete kill any Puppeteer process still active.
    * Freeing up memory.
    */
-  public close = (page?: Page): Promise<void> => {
-    return new Promise(async (resolve, reject) => {
+  public close = async (page?: Page) => {
       const loggerPrefix = 'close';
-
       if (page) {
-        try {
-          statusLog(loggerPrefix, 'Closing page...');
-          await page.close();
-          statusLog(loggerPrefix, 'Closed page!');
-        } catch (err) {
-          reject(err)
-        }
+        statusLog(loggerPrefix, 'Closing page...');
+        await page.close();
+        statusLog(loggerPrefix, 'Closed page!');
       }
 
       if (this.browser) {
-        try {
-          statusLog(loggerPrefix, 'Closing browser...');
-          await this.browser.close();
-          statusLog(loggerPrefix, 'Closed browser!');
+        statusLog(loggerPrefix, 'Closing browser...');
+        await this.browser.close();
+        statusLog(loggerPrefix, 'Closed browser!');
 
-          const browserProcessPid = this.browser.process().pid;
+        const browserProcessPid = this.browser.process().pid;
 
-          // Completely kill the browser process to prevent zombie processes
-          // https://docs.browserless.io/blog/2019/03/13/more-observations.html#tip-2-when-you-re-done-kill-it-with-fire
-          if (browserProcessPid) {
-            statusLog(loggerPrefix, `Killing browser process pid: ${browserProcessPid}...`);
+        // Completely kill the browser process to prevent zombie processes
+        // https://docs.browserless.io/blog/2019/03/13/more-observations.html#tip-2-when-you-re-done-kill-it-with-fire
+        if (browserProcessPid) {
+          statusLog(loggerPrefix, `Killing browser process pid: ${browserProcessPid}...`);
 
-            treeKill(browserProcessPid, 'SIGKILL', (err) => {
-              if (err) {
-                return reject(`Failed to kill browser process pid: ${browserProcessPid}`);
-              }
-
-              statusLog(loggerPrefix, `Killed browser pid: ${browserProcessPid} Closed browser.`);
-              resolve()
-            });
-          }
-        } catch (err) {
-          reject(err);
+          treeKill(browserProcessPid, 'SIGKILL', (err) => {
+            if (err) {
+              statusLog(loggerPrefix, `Failed to kill browser process pid: ${browserProcessPid}`);
+            }
+            statusLog(loggerPrefix, `Killed browser pid: ${browserProcessPid} Closed browser.`);
+          });
         }
       }
-
-      return resolve()
-    })
-
-  }
+    };
 
   /**
    * Simple method to check if the session is still active.

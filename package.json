@@ -1,63 +1,41 @@
 {
   "name": "linkedin-profile-scraper",
-  "version": "2.3.1",
+  "version": "0.1.0",
   "description": "LinkedIn profile scraper returning structured profile data in JSON. Works in 2020.",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "",
   "scripts": {
-    "start": "ts-node-dev -r dotenv/config --inspect=9230 --respawn --transpileOnly ./src/examples/server.ts",
-    "build": "npx tsc -p tsconfig.production.json",
-    "test:watch": "NODE_ENV=test jest --watch --coverage",
-    "test": "NODE_ENV=test jest --coverage",
-    "update": "npx npm-check --update",
-    "release": "release-it"
+    "test": "serverless-bundle test"
   },
   "author": "Jordy van den Aardweg <jordyvandenaardweg@gmail.com> (https://github.com/jvandenaardweg)",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/jvandenaardweg/linkedin-profile-scraper.git"
-  },
-  "license": "ISC",
   "dependencies": {
-    "all-the-cities": "^3.1.0",
+    "@serverless-chrome/lambda": "^1.0.0-57.2",
+    "aws-lambda": "^1.0.6",
+    "aws-sdk": "^2.987.0",
+    "chrome-launcher": "^0.14.1",
+    "dotenv": "^10.0.0",
     "i18n-iso-countries": "^5.4.0",
     "moment": "^2.27.0",
     "moment-timezone": "^0.5.31",
     "puppeteer": "^4.0.1",
+    "superagent": "^6.1.0",
     "tree-kill": "^1.2.2",
-    "aws-lambda": "^1.0.6",
-    "aws-sdk": "^2.987.0",
-    "dotenv": "^10.0.0"
+    "tslib": "^2.0.0"
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.83",
     "@types/jest": "^26.0.3",
     "@types/moment-timezone": "^0.5.13",
     "@types/node": "^14.0.14",
     "@types/puppeteer": "^3.0.1",
-    "@types/all-the-cities": "^3.1.0",
-    "@types/aws-lambda": "^8.10.83",
+    "jest": "^26.1.0",
+    "release-it": "^13.6.4",
     "serverless-bundle": "^5.0.1",
     "serverless-dotenv-plugin": "^3.9.0",
     "serverless-offline": "^8.2.0",
-    "jest": "^26.1.0",
-    "release-it": "^13.6.4",
+    "serverless-plugin-chrome": "^1.0.0-55.3",
     "ts-jest": "^26.1.1",
     "ts-node-dev": "^1.0.0-pre.44",
-    "typescript-tslint-plugin": "^0.5.5",
-    "tslib": "^2.0.0",
-  },
-  "release-it": {
-    "git": {
-      "commit": true,
-      "tag": true,
-      "push": true
-    },
-    "hooks": {
-      "after:bump": "npx auto-changelog -p"
-    },
-    "npm": {
-      "publish": false
-    }
+    "typescript-tslint-plugin": "^0.5.5"
   },
   "jest": {
     "globals": {
