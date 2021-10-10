@@ -30,6 +30,5 @@
       "*": ["src/typings/*"]
     }
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "src/**/*.test.ts"]
+  "exclude": ["src/**/*.test.ts"]
 }
