@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "/",
+    "baseUrl": ".",
     "importHelpers": true,
     "allowJs": false,
     "allowSyntheticDefaultImports": true,
@@ -17,6 +17,7 @@
     "downlevelIteration": true,
     "lib": ["es6", "DOM"],
     "moduleResolution": "node",
+    "sourceMap": true,
     "outDir": "dist",
     "target": "es6",
     "module": "commonjs",
