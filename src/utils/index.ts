@@ -2,7 +2,7 @@ import moment from 'moment-timezone'
 import { Location } from '../index';
 import { Page } from 'puppeteer';
 import countries from 'i18n-iso-countries';
-import cities from 'all-the-cities';
+// import cities from 'all-the-cities';
 
 export const getIsCountry = (text: string): boolean => {
   const countriesList = Object.values(countries.getNames('en'));
@@ -18,13 +18,14 @@ export const getIsCountry = (text: string): boolean => {
 }
 
 export const getIsCity = (text: string): boolean => {
-  const lowerCaseText = text.toLowerCase();
+  // const lowerCaseText = text.toLowerCase();
 
-  if (['new york'].includes(lowerCaseText)) {
-    return true;
-  }
+  // if (['new york'].includes(lowerCaseText)) {
+  //   return true;
+  // }
 
-  return !!cities.find(city => city.name.toLowerCase() === lowerCaseText)
+  // return !!cities.find(city => city.name.toLowerCase() === lowerCaseText)
+  return true;
 }
 
 export const formatDate = (date: moment.MomentInput | string): string => {
@@ -152,10 +153,10 @@ export const statusLog = (section: string, message: string, scraperSessionId?: s
 export const autoScroll = async (page: Page) => {
   await page.evaluate(async () => {
     await new Promise((resolve, reject) => {
-      var totalHeight = 0;
-      var distance = 500;
-      var timer = setInterval(() => {
-        var scrollHeight = document.body.scrollHeight;
+      let totalHeight = 0;
+      const distance = 500;
+      const timer = setInterval(() => {
+        const scrollHeight = document.body.scrollHeight;
         window.scrollBy(0, distance);
         totalHeight += distance;
 
